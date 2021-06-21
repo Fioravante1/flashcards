@@ -3,22 +3,31 @@ import Button from '../components/Button';
 import FlashCard from '../components/FlashCard';
 import FlashCards from '../components/FlashCards';
 import Header from '../components/Header';
+import Loading from '../components/Loading';
 import Main from '../components/Main';
 import RadioButton from '../components/RadioButton';
 import { helperShuffleArray } from '../helpers/arrayHelpers';
 import { apiGetAllFlashCards } from '../services/apiServises';
+import Error from '../components/Error';
 
 export default function FlashCardsPage() {
   const [allCards, setAllCards] = useState([]);
   const [studyCards, setStudyCards] = useState([]);
   const [radioButtonShowTitle, setRadioButtonShowTitle] = useState(true);
-  const [lading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     async function getAllCards() {
-      const backEndAllCards = await apiGetAllFlashCards();
-      setAllCards(backEndAllCards);
-      setLoading(false);
+      try {
+        const backEndAllCards = await apiGetAllFlashCards();
+        setAllCards(backEndAllCards);
+        setTimeout(() => {
+          setLoading(false);
+        }, 2000)
+      } catch(error) {
+        setError(error.message)
+      }
     }
     getAllCards();
   }, []);
@@ -52,11 +61,22 @@ export default function FlashCardsPage() {
     setStudyCards(updatedCards);
   }
 
-  return (
-    <>
-      <Header>react-flash-cards-v2</Header>
-      <Main>
-        <div className="text-center mb-4">
+  let mainJsx = (
+    <div className="flex justify-center my-4">
+      <Loading />
+    </div>
+  );
+
+  if(error) {
+    mainJsx = (
+     <Error>{error}</Error>
+    );
+  };
+
+  if(!loading) {
+    mainJsx = (
+      <>
+         <div className="text-center mb-4">
           <Button onButtonClick={handleShuffle}>Embaralhar cards</Button>
         </div>
 
@@ -94,6 +114,16 @@ export default function FlashCardsPage() {
             );
           })}
         </FlashCards>
+      </>
+    )
+  }
+
+  return (
+    <>
+      <Header>react-flash-cards-v2</Header>
+      
+      <Main>
+        {mainJsx}
       </Main>
     </>
   );
