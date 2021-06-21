@@ -1,56 +1,61 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from '../components/Button';
 import FlashCard from '../components/FlashCard';
 import FlashCards from '../components/FlashCards';
 import Header from '../components/Header';
 import Main from '../components/Main';
 import RadioButton from '../components/RadioButton';
-import { allFlashCards } from '../data/allFlashCards';
 import { helperShuffleArray } from '../helpers/arrayHelpers';
+import { apiGetAllFlashCards } from '../services/apiServises';
 
 export default function FlashCardsPage() {
-  const [allCards, setAllCards] = useState(allFlashCards);
+  const [allCards, setAllCards] = useState([]);
+  const [studyCards, setStudyCards] = useState([]);
   const [radioButtonShowTitle, setRadioButtonShowTitle] = useState(true);
 
-  function handleButtonClick() {
-    const shuffledCards = helperShuffleArray(allCards);
+  useEffect(() => {
+    async function getAllCards() {
+      const backEndAllCards = await apiGetAllFlashCards();
+      setAllCards(backEndAllCards);
+    }
+    getAllCards();
+  }, []);
 
-    setAllCards(shuffledCards);
+  function handleShuffle() {
+    const shuffledCards = helperShuffleArray(studyCards);
+    setStudyCards(shuffledCards);
   }
 
-  function handleRadioShowDescriptionClick() {
-    // prettier-ignore
-    const updatedCards = 
-      [...allCards].map(card => ({...card, showTitle: false}));
+  useEffect(() => {
+    setStudyCards(allCards.map(card => ({...card, showTitle: true})))
+  }, [allCards]);
 
-    setAllCards(updatedCards);
+  function handleRadioShowDescriptionClick() {
+    const updatedCards = [...studyCards].map(card => ({...card, showTitle: false}));
+    setStudyCards(updatedCards);
     setRadioButtonShowTitle(false);
   }
 
   function handleRadioShowTitleClick() {
-    // prettier-ignore
-    const updatedCards = 
-      [...allCards].map(card => ({...card, showTitle: true}));
-
-    setAllCards(updatedCards);
-
+    const updatedCards = [...studyCards].map(card => ({...card, showTitle: true}));
+    setStudyCards(updatedCards);
     setRadioButtonShowTitle(true);
   }
 
   function handleToggleFlashCard(cardId) {
-    const updatedCards = [...allCards];
+    const updatedCards = [...studyCards];
     const cardIndex = updatedCards.findIndex(card => card.id === cardId);
     updatedCards[cardIndex].showTitle = !updatedCards[cardIndex].showTitle;
 
-    setAllCards(updatedCards);
+    setStudyCards(updatedCards);
   }
 
   return (
     <>
-      <Header>react-flash-cards-v1</Header>
+      <Header>react-flash-cards-v2</Header>
       <Main>
         <div className="text-center mb-4">
-          <Button onButtonClick={handleButtonClick}>Embaralhar cards</Button>
+          <Button onButtonClick={handleShuffle}>Embaralhar cards</Button>
         </div>
 
         <div className="flex flex-row items-center justify-center space-x-4 m-4">
@@ -74,7 +79,7 @@ export default function FlashCardsPage() {
         </div>
 
         <FlashCards>
-          {allCards.map(({ id, title, description, showTitle }) => {
+          {studyCards.map(({ id, title, description, showTitle }) => {
             return (
               <FlashCard
                 key={id}
