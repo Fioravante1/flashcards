@@ -12,11 +12,13 @@ export default function FlashCardsPage() {
   const [allCards, setAllCards] = useState([]);
   const [studyCards, setStudyCards] = useState([]);
   const [radioButtonShowTitle, setRadioButtonShowTitle] = useState(true);
+  const [lading, setLoading] = useState(true);
 
   useEffect(() => {
     async function getAllCards() {
       const backEndAllCards = await apiGetAllFlashCards();
       setAllCards(backEndAllCards);
+      setLoading(false);
     }
     getAllCards();
   }, []);
