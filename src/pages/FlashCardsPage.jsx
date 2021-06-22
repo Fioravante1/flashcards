@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 import Button from '../components/Button';
 import FlashCard from '../components/FlashCard';
 import FlashCards from '../components/FlashCards';
