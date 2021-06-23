@@ -16,6 +16,7 @@
     "react-scripts": "4.0.3",
     "react-spinners": "0.10.6",
     "react-tabs": "^3.2.2",
+    "react-toastify": "^7.0.4",
     "uuid": "8.3.2"
   },
   "devDependencies": {
@@ -44,5 +45,5 @@
     ">0.2%",
     "not dead",
     "not op_mini all"
-    ]
+  ]
 }

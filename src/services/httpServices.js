@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+const BASE_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : 'https://flashcard-fioravante-chiozzi.glitch.me'
+
 const axiosInstance = axios.create({
-  baseURL: 'https://flashcard-fioravante-chiozzi.glitch.me',
+  baseURL: BASE_URL,
   timeout: 10000
 });
 
