@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-const axiosInstance = axios.create({baseURL: 'http://localhost:3001', timeout: 10000})
+const axiosInstance = axios.create({
+  baseURL: 'https://flashcard-fioravante-chiozzi.glitch.me',
+  timeout: 10000
+});
 
 export async function read(url) {
   const { data } = await axiosInstance.get(url);

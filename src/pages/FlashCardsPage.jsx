@@ -232,7 +232,7 @@ export default function FlashCardsPage() {
 
   return (
     <>
-      <Header>react-flash-cards-v2</Header>
+      <Header>Flash Card</Header>
       
       <Main>
         {mainJsx}
