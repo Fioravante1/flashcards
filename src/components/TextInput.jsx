@@ -1,9 +1,13 @@
+import { getNewId } from "../services/idService";
+
+
 export default function TextInput({
   labelDescription = 'Descrição do label:',
   inputValue = 'Valor padrão do input',
   onInputChange = null,
-  id = 'id_do_input_text',
+  id = getNewId(),
   autoFocus = false,
+  
 }) {
   function handleInputChange({ currentTarget }) {
     if (onInputChange) {
